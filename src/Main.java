@@ -1,15 +1,11 @@
 import animals.Animal;
-import animals.birds.Duck;
 import animals.birds.IFly;
-import animals.pets.Cat;
-import animals.pets.Dog;
 import data.AnimalData;
 import data.CommandsData;
 import factory.AnimalFactory;
 
 import java.util.*;
-
-import static data.CommandsData.*;
+import java.util.regex.Pattern;
 
 
 public class Main {
@@ -18,6 +14,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         List<Animal> animallist = new ArrayList<>();
         AnimalFactory animalFactory = new AnimalFactory();
+
 
         while (true) {
             System.out.println("Допустимые команды: ADD, LIST, EXIT");
@@ -62,17 +59,16 @@ public class Main {
                         Animal animal = animalFactory.create(AnimalData.valueOf(animalTypeStr));
 
                         Scanner scannerName = new Scanner(System.in);
-                        String name = "";
-                        while (true) {
-                            System.out.println("Введите имя животного");
-                            name = scannerName.next();
-                            if (name.matches("[А-я]+")) {
-                                animal.setName(name);
-                                break;
-                            } else {
-                                System.out.println("Принимаем только отечественные имена");
-                            }
-                        }
+
+                        System.out.println("Введите имя животного");
+                        String name = dataValidateStr(scannerName);
+                        animal.setName(name);
+
+                        Scanner scannerColor = new Scanner(System.in);
+
+                        System.out.println("Введите цвет животного");
+                        String color = dataValidateStr(scannerColor);
+                        animal.setColor(color);
 
                         Scanner scannerAge = new Scanner(System.in);
                         System.out.println("Введите возраст животного");
@@ -91,20 +87,6 @@ public class Main {
                             } else {
                                 animal.setAge(age);
                                 break;
-                            }
-                        }
-
-
-                        Scanner scannerColor = new Scanner(System.in);
-                        String color = "";
-                        while (true) {
-                            System.out.println("Введите цвет животного");
-                            color = scannerColor.next();
-                            if (color.matches("[А-я]+")) {
-                                animal.setColor(color);
-                                break;
-                            } else {
-                                System.out.println("Только русские буквы");
                             }
                         }
 
@@ -157,5 +139,22 @@ public class Main {
         }
 
     }
-}
+    private static String dataValidateStr (Scanner scanner) {
+        String validateStr;
+        while (true){
+            validateStr = scanner.next();
+            if (!validateStr.matches("^[А-я]+")) {
+                System.out.println("Принимаем только русские быквы");
+                continue;
+            }
+            break;
+            }
+        return validateStr;
+
+        }
+
+    }
+
+
+
 
